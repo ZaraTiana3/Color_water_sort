@@ -2,12 +2,8 @@ import heapq
 import copy 
  #Using 6 tubes but with negative heapq 
 
-#ALL_COLOR = ['g','o','k','s','b','r','w']
 from itertools import takewhile
 
-"""t = [['c','k','k','r'],['m','w','b','b'],['w','w','p','g'],['b','g','m','r'],['c','o','r','m'],
-      ['c','g','p','c'],['p','p','o','r'],['o','b','o','m'], ['g','k','w','k'],[' ']*NIVEAU,[' ']*NIVEAU]
-"""
 
 class Tube:
     def __init__(self, tube):
@@ -67,10 +63,9 @@ def determine_candidates(t, space:list): #candidates is the  postion_to_fill(con
         if i not in space: 
             continue
         qtt = t[0:NIVEAU].count(' ')
-        #clr =  ALL_COLOR if qtt == 4 else [t[qtt]]
         if qtt==4:
             for c in ALL_COLOR:
-                res.append([-qtt, i, c])
+                res.append([-qtt, i, c]) #faire une liste pour une position et chaque couleur possible
         else:
             res.append([-qtt, i, t[qtt]]) #i: position, qtt: quantite libre
     return res
@@ -126,10 +121,8 @@ def cancel_move(t, niveau_filler,clr_filled:str, pos_filler:int,pos_filled:int, 
         t.t[pos_filler][i]=clr_filled
 
     evaluate_state(t, pos_filler, clr_filled)
-    #print(t.state)
  
     evaluate_state(t, pos_filled, clr_filled)
-    #print(t.state)
 
 
 def solve(t, k, dic):
@@ -138,7 +131,6 @@ def solve(t, k, dic):
     
     dic[k] = copy.deepcopy(t.t)
 
-    #print("Sum(i for i in t.state): ", sum(i for i in t.state))
     if sum(i for i in t.state)==TUBE-2:
         t.print_tube() 
         for k, v in dic.items():
@@ -165,7 +157,6 @@ def solve(t, k, dic):
             continue
         fill_modify(t, niveau_filler, clr_filled, pos_filler,pos_filled, qtt_filler, qtt_filled)
         #Afficher l'etat actuel du tube
-        #t.print_tube()
         if solve(t, k, dic):
             return True
         cancel_move(t, niveau_filler, clr_filled, pos_filler,pos_filled, qtt_filler, qtt_filled)
